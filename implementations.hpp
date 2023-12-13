@@ -9,14 +9,10 @@ LinkedList<T>::LinkedList() :l_size(0) , head(nullptr)
 template<typename T>
 LinkedList<T>::~LinkedList()
 {
-    Node* tmp = head;
-    while(tmp -> next)
-    {
-        tmp = tmp -> next;
-        delete tmp;
-    }
-    delete tmp -> next;
-    head = nullptr;
+    // if(head)
+    // {
+    //     clear();
+    // }
 }
 
 //NODE PARAMETRIZED CONSTRUCTOR
@@ -212,15 +208,15 @@ size_t LinkedList<T>::max_size() const
     return 768614336404564650;
 }
 
-//CLEAR          seg. fault a talis  ???
+//CLEAR          
 template<typename T>
 void LinkedList<T>::clear()
 {
     while (head)
     {
-        Node* tmp = head->next;
-        delete head;
-        head = tmp;
+        Node* p = head;
+        head = head -> next;
+        delete p;
     }
 
     head = nullptr;
@@ -283,14 +279,13 @@ void LinkedList<T>::erase(size_t pos)
 
     if (pos == 0)
     {
-        pop_front();  // This already updates head and handles deletion
+        pop_front(); 
         return;
     }
 
     Node* tmp = head;
     size_t pos_counter = 0;
 
-    // Traverse to the node at position 'pos - 1'
     while (pos_counter < pos - 1)
     {
         tmp = tmp->next;
@@ -304,7 +299,7 @@ void LinkedList<T>::erase(size_t pos)
     --l_size;
 }
 
-//RESIZE    ??some cases are not handled
+//RESIZE  
 template<typename T>
 void LinkedList<T>::resize(size_t new_size)
 {
@@ -352,25 +347,18 @@ void LinkedList<T>::resize(size_t new_size)
     {
         size_t counter = 0;
         Node* tmp = head;
-        while(counter < l_size - 1)
+        while(tmp->next != nullptr)
         {
             tmp = tmp -> next;
-            ++counter;
         }
 
-        counter = 0;
-        while(counter < new_size - l_size - 1)
+        while(counter <= new_size - l_size - 1)
         {
             Node* new_node = new Node(0);
             tmp -> next = new_node;
-            tmp = new_node;
+            tmp = tmp -> next;
             ++counter;
         }
-
-        tmp -> next = nullptr;
-        delete head;
-        head = tmp;
-        tmp = nullptr;
     }
 }
 
@@ -386,78 +374,137 @@ void LinkedList<T>::swap(LinkedList<T>& another)
 template<typename T>
 void LinkedList<T>::reverse()
 {
-    std::vector<T> vec;
-    Node* tmp = head;
-    while(tmp)
+    Node* prev = nullptr;
+    Node* curr = head;
+    Node* next = nullptr;
+    while(curr != nullptr)
     {
-        vec.push_back(tmp -> val);
-        tmp = tmp -> next;
+        next = curr -> next;
+        curr -> next = prev;
+        prev = curr;
+        curr = next;
     }
-
-    std::reverse(vec.begin() , vec.end());
-    clear();
-
-    Node* new_head = nullptr;
-    Node* current = nullptr;
-
-    for (size_t i = 0; i < vec.size(); ++i)
-    {
-        Node* new_node = new Node(vec[i]);
-        
-        if (!new_head) 
-        {
-            new_head = new_node;
-            current = new_head;
-        } 
-
-        else 
-        {
-            current -> next = new_node;
-            current = new_node;
-        }
-    }
-
-    head = new_head;
-    l_size = vec.size();
+    head = prev;
 }
 
 //SORT
 template<typename T>
 void LinkedList<T>::sort()
 {
-    std::vector<T> vec;
+    Node* current = head;
+    Node* minimum = head;
     Node* tmp = head;
-    while(tmp)
+    Node* n_node;
+    Node* curr_next_node;
+
+    tmp = current->next;
+    while (tmp)
     {
-        vec.push_back(tmp -> val);
-        tmp = tmp -> next;
+        if (minimum->val > tmp->val)
+        {
+            minimum = tmp;
+        }
+        tmp = tmp->next;
+    }
+    n_node = minimum->next;
+    current->next = n_node;
+    minimum->next = head;
+    head = minimum;
+
+    current = head;
+    minimum = head;
+    tmp = head;
+    Node* tmp_min_back = nullptr;
+    Node* min_back = nullptr;
+
+    while (current->next)
+    {
+        minimum = current;
+        tmp = current->next;
+        tmp_min_back = current;
+        while (tmp)
+        {
+            if (minimum->val > tmp->val)
+            {
+                minimum = tmp;
+                min_back = tmp_min_back;
+            }
+            tmp = tmp->next;
+            tmp_min_back = tmp_min_back->next;
+        }
+        n_node = minimum->next;
+        curr_next_node = current->next;
+        current->next = minimum;
+        minimum->next = curr_next_node;
+        min_back->next = n_node;
+    }
+}
+
+//MERGE
+template <typename T>
+void LinkedList<T>::merge(LinkedList<T>& another)
+{
+    if(another -> head -> val > this -> head -> val)
+    {
+        std::swap(another,this);
     }
 
-    std::sort(vec.begin() , vec.end());
-    clear();
+    Node* tmp_head1 = this -> head;
+    Node* tmp_head2 = another -> head;
 
-    Node* new_head = nullptr;
-    Node* current = nullptr;
-
-    for (size_t i = 0; i < vec.size(); ++i)
+    while(tmp_head2 != nullptr)
     {
-        Node* new_node = new Node(vec[i]);
-        
-        if (!new_head) 
+        if(tmp_head1 -> val < tmp_head2 -> val)
         {
-            new_head = new_node;
-            current = new_head;
-        } 
+            if(tmp_head1 -> next -> val < tmp_head2 -> val)
+            {
+                tmp_head1 = tmp_head1 -> next;             
+                continue;
+            }    
+        }
 
-        else 
+        if(tmp_head1 -> val == tmp_head2 -> val)
         {
-            current -> next = new_node;
-            current = new_node;
+            Node* tmp_next1 = tmp_head1 -> next;
+            Node* tmp_next2 = tmp_head2 -> next;
+            tmp_head1 -> next = tmp_head2;
+            tmp_head2 -> next = tmp_next1;
+            tmp_head2 = tmp_next2;
+            tmp_head1 = tmp_head1 -> next;
         }
     }
-    head = new_head;
-    l_size = vec.size();
 }
+
+//UNIQUE
+template <typename T>
+void LinkedList<T>::unique()
+{
+    if (!head)
+    {
+        return;
+    }
+
+    Node *tmp_head = head;
+    Node *tmp_next = tmp_head->next;
+
+    while (tmp_next)
+    {
+        if (tmp_head->val == tmp_next->val)
+        {
+            Node *temp = tmp_next;
+            tmp_next = tmp_next->next;
+            delete temp;
+        }
+        else
+        {
+            tmp_head->next = tmp_next;
+            tmp_head = tmp_head->next;
+            tmp_next = tmp_next->next;
+        }
+    }
+    tmp_head->next = nullptr;
+}
+
 
 
 
@@ -513,24 +560,22 @@ bool operator !=(const LinkedList<T>& list1 , const LinkedList<T>& list2)
 template<typename T>
 bool operator<(const LinkedList<T>& list1, const LinkedList<T>& list2)
 {
-    // Compare the sizes of the lists
     if (list1.size() < list2.size())
     {
         return true;
     }
+
     else if (list1.size() > list2.size())
     {
         return false;
     }
 
-    // Sizes are equal, compare elements
     typename LinkedList<T>::Node* tmp1 = list1.getHead();
     typename LinkedList<T>::Node* tmp2 = list2.getHead();
 
     std::vector<T> vec1;
     std::vector<T> vec2;
-
-    // Populate vectors with elements from lists
+    
     while (tmp1)
     {
         vec1.push_back(tmp1->val);

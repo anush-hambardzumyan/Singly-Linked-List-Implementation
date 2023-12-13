@@ -25,10 +25,11 @@ class LinkedList
 
     LinkedList();                                   //done
     ~LinkedList();                                  //done
+    
     //METHODS
     void push_back(const T& element);               //done
     void push_front(const T& element);              //done
-    void pop_back();                                //done ??
+    void pop_back();                                //done 
     void pop_front();                               //done
     void print();                                   //done
     void assign(size_t quantity, const T& value);   //done 
@@ -37,13 +38,15 @@ class LinkedList
     bool empty() const;                             //done  
     size_t size() const;                            //done    
     size_t max_size() const;                        //done
-    void clear();                                   // ????
+    void clear();                                   //done
     void insert(size_t pos, const T& value);        //done
     void erase(size_t pos);                         //done
-    void resize(size_t new_size);                   // ??some cases are not handled
+    void resize(size_t new_size);                   //done
     void swap(LinkedList<T>& another);              //done
-    void reverse();                                 //done ??
-    void sort();                                    //done
+    void reverse();                                 //done  
+    void sort();                                    //done  ????
+    void merge(LinkedList<T>& another);
+    void unique();
     Node* getHead() const 
     {
         return head;
@@ -67,7 +70,6 @@ bool operator >(const LinkedList<T>& list1 , const LinkedList<T>& list2);
 
 template<typename T>
 bool operator <=(const LinkedList<T>& list1 , const LinkedList<T>& list2);
-
 
 
 #include "implementations.hpp"

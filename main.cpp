@@ -7,6 +7,7 @@ int main()
     list.push_back(2);
     list.push_back(3);
     list.push_back(4);
+    list.print();
     std::cout << "Elements after push_back: " << std::endl;
     list.print();
     std::cout << std::endl;
@@ -72,10 +73,12 @@ int main()
     std::cout << std::endl;
     std::cout << std::endl;
     list.resize(10);                                                     
-//     std::cout << "List after second resize: ";                      //this case doesnt work right
-//     list.print();
-//     std::cout << std::endl;
-// }
+    std::cout << "List after second resize: ";                      //this case doesnt work right
+    std::cout << std::endl;
+    list.print();
+    std::cout << std::endl;
+    std::cout << std::endl;
+
 
     LinkedList<int> list2;                                          //check of swap
     list2.push_back(10);
@@ -131,7 +134,26 @@ int main()
         std::cout << "is smaller than the list " ; 
         list4.print();
         std::cout << std::endl; 
-    }
+    }  
 
-    
+    LinkedList<int> list5;
+    list5.push_back(1);
+    list5.push_back(1);
+    list5.push_back(2);
+    list5.push_back(2);
+    list5.push_back(2);
+    list5.push_back(3);
+    list5.push_back(6);
+    list5.push_back(6);
+
+    list5.unique();
+    list5.print();
+    LinkedList<int> list6;
+    list6.push_back(1);
+    list6.push_back(4);
+    list6.push_back(6);
+
+
+
+
 }    
