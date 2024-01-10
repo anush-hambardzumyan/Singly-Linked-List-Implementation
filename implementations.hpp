@@ -7,7 +7,7 @@ LinkedList<T>::LinkedList() :l_size(0) , head(nullptr)
 
 //DESTRUCTOR
 template<typename T>
-LinkedList<T>::~LinkedList()
+LinkedList<T>::~LinkedList()     //?????
 {
     // if(head)
     // {
@@ -225,79 +225,70 @@ void LinkedList<T>::clear()
 
 //INSERT
 template<typename T>
-void LinkedList<T>::insert(size_t pos, const T& value)
+void LinkedList<T>::insert(iterator pos, const T& value)
 {
-    if((!head && pos == 0) || pos == 0)
+    if((!head && pos == begin()) || pos == begin())
     {
         push_front(value);
         return;
     }
 
-    if(pos == l_size)
+    iterator it = begin();
+    Node* curr = head;
+    Node* prev = nullptr;
+    while(it != pos)
     {
-        push_back(value);
-        return;
+        prev = curr;
+        curr = curr -> next;
+        ++it;
     }
 
-    if(pos > l_size)
-    {
-        std::cout << "Invalid operation. Out of range: " << std::endl;
-        return;
-    }
-
-    Node* tmp = head;
-    size_t pos_counter = 0;
-    while(pos_counter < pos - 1)
-    {
-        tmp = tmp -> next;
-        ++pos_counter;
-    }
-
-    Node* new_node = new Node(value);
-
-    new_node->next = tmp->next;
-    tmp->next = new_node;
+    prev->next = new Node(value);
+    prev->next->next = curr;
 
     l_size++;
 }
 
 //ERASE
 template<typename T>
-void LinkedList<T>::erase(size_t pos)
+void LinkedList<T>::erase(iterator& pos)
 {
+    
     if (!head)
     {
         std::cout << "Invalid operation. List is empty." << std::endl;
         return;
     }
+    // iterator i = begin();
 
-    if (pos >= l_size)
-    {
-        std::cout << "Invalid operation. Out of range." << std::endl;
-        return;
-    }
-
-    if (pos == 0)
+    if (pos == begin())
     {
         pop_front(); 
+        // std::cout << 10;
         return;
     }
+   
 
-    Node* tmp = head;
-    size_t pos_counter = 0;
-
-    while (pos_counter < pos - 1)
+    Node* curr = head;
+    Node* prev = nullptr;
+    iterator pos_counter = begin();
+    iterator current = pos_counter;
+    
+    while (pos_counter != pos)
     {
-        tmp = tmp->next;
+        current = pos_counter;
+        prev = curr;
+        curr = curr -> next;
         ++pos_counter;
     }
 
-    Node* to_delete = tmp->next;
-    tmp->next = to_delete->next;
-
-    delete to_delete;
+    pos = current;
+    prev->next = curr->next;
+    delete curr;
+    curr = nullptr;
     --l_size;
 }
+
 
 //RESIZE  
 template<typename T>
@@ -387,127 +378,20 @@ void LinkedList<T>::reverse()
     head = prev;
 }
 
-//SORT
-template<typename T>
-void LinkedList<T>::sort()
-{
-    Node* current = head;
-    Node* minimum = head;
-    Node* tmp = head;
-    Node* n_node;
-    Node* curr_next_node;
-
-    tmp = current->next;
-    while (tmp)
-    {
-        if (minimum->val > tmp->val)
-        {
-            minimum = tmp;
-        }
-        tmp = tmp->next;
-    }
-    n_node = minimum->next;
-    current->next = n_node;
-    minimum->next = head;
-    head = minimum;
-
-    current = head;
-    minimum = head;
-    tmp = head;
-    Node* tmp_min_back = nullptr;
-    Node* min_back = nullptr;
-
-    while (current->next)
-    {
-        minimum = current;
-        tmp = current->next;
-        tmp_min_back = current;
-        while (tmp)
-        {
-            if (minimum->val > tmp->val)
-            {
-                minimum = tmp;
-                min_back = tmp_min_back;
-            }
-            tmp = tmp->next;
-            tmp_min_back = tmp_min_back->next;
-        }
-        n_node = minimum->next;
-        curr_next_node = current->next;
-        current->next = minimum;
-        minimum->next = curr_next_node;
-        min_back->next = n_node;
-    }
-}
-
-//MERGE
+///// ITERATORS
+//BEGIN
 template <typename T>
-void LinkedList<T>::merge(LinkedList<T>& another)
+typename LinkedList<T>::iterator LinkedList<T>::begin()
 {
-    if(another -> head -> val > this -> head -> val)
-    {
-        std::swap(another,this);
-    }
+    return iterator(head);
+} 
 
-    Node* tmp_head1 = this -> head;
-    Node* tmp_head2 = another -> head;
-
-    while(tmp_head2 != nullptr)
-    {
-        if(tmp_head1 -> val < tmp_head2 -> val)
-        {
-            if(tmp_head1 -> next -> val < tmp_head2 -> val)
-            {
-                tmp_head1 = tmp_head1 -> next;             
-                continue;
-            }    
-        }
-
-        if(tmp_head1 -> val == tmp_head2 -> val)
-        {
-            Node* tmp_next1 = tmp_head1 -> next;
-            Node* tmp_next2 = tmp_head2 -> next;
-            tmp_head1 -> next = tmp_head2;
-            tmp_head2 -> next = tmp_next1;
-            tmp_head2 = tmp_next2;
-            tmp_head1 = tmp_head1 -> next;
-        }
-    }
-}
-
-//UNIQUE
+//END
 template <typename T>
-void LinkedList<T>::unique()
+typename LinkedList<T>::iterator LinkedList<T>::end()
 {
-    if (!head)
-    {
-        return;
-    }
-
-    Node *tmp_head = head;
-    Node *tmp_next = tmp_head->next;
-
-    while (tmp_next)
-    {
-        if (tmp_head->val == tmp_next->val)
-        {
-            Node *temp = tmp_next;
-            tmp_next = tmp_next->next;
-            delete temp;
-        }
-        else
-        {
-            tmp_head->next = tmp_next;
-            tmp_head = tmp_head->next;
-            tmp_next = tmp_next->next;
-        }
-    }
-    tmp_head->next = nullptr;
+    return iterator(nullptr);
 }
-
-
-
-
 
 
 //OPERATORS

@@ -7,7 +7,6 @@ int main()
     list.push_back(2);
     list.push_back(3);
     list.push_back(4);
-    list.print();
     std::cout << "Elements after push_back: " << std::endl;
     list.print();
     std::cout << std::endl;
@@ -25,7 +24,7 @@ int main()
     std::cout << std::endl;
     std::cout << std::endl;
 
-    list.pop_front();              //check of pop_front()
+    list.pop_front();                                                               //check of pop_front()
     std::cout << "Elements after pop_front: " << std::endl;
     list.print();
     std::cout << std::endl;
@@ -36,7 +35,7 @@ int main()
     std::cout << "Element on back is: " << std::endl << list.back() << std::endl;    //check of back()
     std::cout << std::endl;
 
-    if(!list.empty())                                                   //check of empty
+    if(!list.empty())                                                                 //check of empty
     {
         std::cout << "List is not empty: " << std::endl;
         std::cout << std::endl;
@@ -48,20 +47,21 @@ int main()
     std::cout << "Maximum size of list is: " <<std::endl << list.max_size() << std::endl;  //check of clear
     std::cout << std::endl;
 
-    //list.clear();                                                             //check of clear
-    //std::cout << "Size of list after clearing: " << list.size() << std::endl;
-
-    list.insert(1,0);                                                       //check of insert
-    list.insert(3,0);
-    list.insert(5,0);             
+    LinkedList<int>::iterator it1 = list.begin();
+    list.insert(it1,6);                                                   //check of insert  
+    ++it1;
+    list.insert(it1,4);          
     std::cout << "List after insertion: " << std::endl;         
     list.print();
     std::cout << std::endl;
-    std::cout << std::endl;
 
-    list.erase(0);                                                      //check of erase
-    list.erase(1);
-    list.erase(2);
+    LinkedList<int>::iterator it2 = list.begin();
+    it2++;
+    it2++;
+    list.erase(it2);                                                    //check of erase                                                
+    it2++;
+    list.erase(it2);
+    std::cout << std::endl;                                                 
     std::cout << "List after erasing: " << std::endl;
     list.print();
     std::cout << std::endl;
@@ -72,7 +72,8 @@ int main()
     list.print();
     std::cout << std::endl;
     std::cout << std::endl;
-    list.resize(10);                                                     
+    list.resize(10);   
+
     std::cout << "List after second resize: ";                      //this case doesnt work right
     std::cout << std::endl;
     list.print();
@@ -92,12 +93,6 @@ int main()
 
     list.reverse();                                                 //check of reverse
     std::cout << "List in reverse order: " << std::endl;
-    list.print();
-    std::cout << std::endl;
-    std::cout << std::endl;
-
-    list.sort();
-    std::cout << "List in sorted order: " << std::endl;              //check of sort
     list.print();
     std::cout << std::endl;
     std::cout << std::endl;
@@ -135,25 +130,4 @@ int main()
         list4.print();
         std::cout << std::endl; 
     }  
-
-    LinkedList<int> list5;
-    list5.push_back(1);
-    list5.push_back(1);
-    list5.push_back(2);
-    list5.push_back(2);
-    list5.push_back(2);
-    list5.push_back(3);
-    list5.push_back(6);
-    list5.push_back(6);
-
-    list5.unique();
-    list5.print();
-    LinkedList<int> list6;
-    list6.push_back(1);
-    list6.push_back(4);
-    list6.push_back(6);
-
-
-
-
 }    
