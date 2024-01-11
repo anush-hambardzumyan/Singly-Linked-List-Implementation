@@ -7,12 +7,12 @@ LinkedList<T>::LinkedList() :l_size(0) , head(nullptr)
 
 //DESTRUCTOR
 template<typename T>
-LinkedList<T>::~LinkedList()     //?????
+LinkedList<T>::~LinkedList()     
 {
-    // if(head)
-    // {
-    //     clear();
-    // }
+    if(head)
+    {
+        clear();
+    }
 }
 
 //NODE PARAMETRIZED CONSTRUCTOR
