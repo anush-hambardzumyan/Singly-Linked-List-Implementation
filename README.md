@@ -28,7 +28,28 @@ However, unlike dynamic arrays, accessing the data in these nodes takes linear t
 | Insertion | O(1) |  O(1) |
 | Deletion | O(1) |  O(1) |
 
+![insertion-operation-of-linked-list](https://github.com/anush-hambardzumyan/Singly-Linked-List-Implementation/assets/66312436/e7fa48b2-ae7e-43f3-ae64-2d5cb93fc81f)
+
+
+
 _________
+This implementation also includes nested iterator class, and in some methods , like std::list , self-made iterators are used. <br>
 **This implementation includes following methods**
-- [x]
-- 
+- [x] Constructor
+- [x] Destructor
+- [x] push_back
+- [x] push_front
+- [x] print
+- [x] assign
+- [x] front
+- [x] back
+- [x] empty
+- [x] size
+- [x] max_size
+- [x] clear
+- [x] insert
+- [x] erase
+- [x] resize
+- [x] swap
+- [x] reverse
+
